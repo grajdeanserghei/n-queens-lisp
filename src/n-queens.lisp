@@ -57,9 +57,9 @@
 (defun draw-square(i j board-canvas board-settings)
   (let* ((side (gethash 'side board-settings))
 	 (margin (gethash 'margin board-settings))
+	 (x1 (get-square-coords i board-settings))
+	 (y1 (get-square-coords j board-settings))
 	 (coords (list 0 0 side side))
-	 (x1 (+ (* i side) margin))
-	 (y1 (+ (* j side) margin))
 	 (coords (primitives:translate-coords coords x1 y1))
 	 (args (push board-canvas coords))
  	 (square (apply #'create-rectangle args))
@@ -71,28 +71,9 @@
 
 (defun draw-queen(x y canvas board-model)
   (let* ((queen-coords '(10 70 70 70 60 60 70 45 75 12 60 40 58 6 47 40 40 2 32 40 21 6 17 40 3 12 5 40 18 60 10 70))
-	 ;;	 (c (make-instance 'canvas :master canvas :width 400 :height 300))
 	 (scalled-coords (primitives:scale-coords queen-coords 0.5))
 	 (translated-coords (primitives:translate-coords scalled-coords (get-square-coords x board-model) (get-square-coords y board-model)))
 	 (queen (create-polygon canvas translated-coords)))
-	 
-;;	 (image-path (merge-pathnames "images/queen.png" *load-truename*))
-;;	 (image-path "C:/work/n-queens/src/images/queen.png")
-;;	 (image-path "images/queen.png")
-;;	 (img (make-image))
-;;    (image-load img image-path))
-;;    (create-image canvas x y :image img)
-;;    (itemconfigure c img "width" 30)
-;;    (configure c :borderwidth 2 :relief :sunken)
-
-#||
-    (let* ((queen-img (create-image c x y :image image)))
-	   (itemconfigure c image "width" 30)
-	   )
-||#
-;;	 (configure c :borderwidth 2 :relief :sunken)
-;;	 (scale queen 0.25)
-    ;;    (configure c :borderwidth 2 :relief :sunken)
     (itemconfigure canvas queen "fill" "gold")
     queen)
   )
@@ -103,15 +84,7 @@
     (+ (* x side) margin)
     ))
 
-(defun get-queen-image()
-  (let* ((image (make-image)))
-  (image-load image "images/queen.png"))
-  )
-
-(scale_vect '(1 2 3) 0.2)
-
-(get-queen-image)
-    
+  
 (draw-chessboard 8)
 
 (translate_vect '(1 2 3 4) 1 2)
