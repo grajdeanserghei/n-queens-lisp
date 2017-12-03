@@ -1,6 +1,19 @@
+(defpackage :n-queens
+  (:use :common-lisp
+	:primitives
+	:ltk
+	#+:sbcl :sb-ext
+          )
+  (:export
+   #:hello-1))
+
+#||
 (asdf:load-system :ltk)
 
 (use-package :ltk)
+||#
+
+(in-package :n-queens)
 
 (defun hello-1()
   (with-ltk ()
@@ -58,16 +71,16 @@
 (defun draw-queen(x y canvas board-model)
   (let* ((queen-coords '(10 70 70 70 60 60 70 45 75 12 60 40 58 6 47 40 40 2 32 40 21 6 17 40 3 12 5 40 18 60 10 70))
 	 ;;	 (c (make-instance 'canvas :master canvas :width 400 :height 300))
-	 (scalled-coords (scale-vect queen-coords 0.5))
-	 (translated-coords (translate-vect scalled-coords (get-square-coords x board-model) (get-square-coords y board-model)))
-	 (queen (create-polygon canvas translated-coords))
-	 )
+	 (scalled-coords (primitives:scale-coords queen-coords 0.5))
+	 (translated-coords (primitives:translate-coords scalled-coords (get-square-coords x board-model) (get-square-coords y board-model)))
+	 (queen (create-polygon canvas translated-coords)))
+	 
 ;;	 (image-path (merge-pathnames "images/queen.png" *load-truename*))
 ;;	 (image-path "C:/work/n-queens/src/images/queen.png")
 ;;	 (image-path "images/queen.png")
-;;	 (img (make-image)))    
-;;    (image-load img image-path)
-;;    (create-image c x y :image img)
+;;	 (img (make-image))
+;;    (image-load img image-path))
+;;    (create-image canvas x y :image img)
 ;;    (itemconfigure c img "width" 30)
 ;;    (configure c :borderwidth 2 :relief :sunken)
 
@@ -89,19 +102,9 @@
     (+ (* x side) margin)
     ))
 
-(defun scale-vect(vector scale)
-  (map 'list #'(lambda (x) (* x scale)) vector)
-  )
-
-(defun translate-vect(vector x y)
-  (let ((index 0))
-    (map 'list #'(lambda (val) (let ((r (+ val (if(oddp index) y x))))(incf index) r)) vector)
-    )
-  )
-
 (defun get-queen-image()
   (let* ((image (make-image)))
-  (image-load image "C:/work/n-queens/src/images/queen.png"))
+  (image-load image "images/queen.png"))
   )
 
 (scale_vect '(1 2 3) 0.2)
@@ -118,5 +121,4 @@
 *buffer-file-name*
 
 
-(ltktest)
 
