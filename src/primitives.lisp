@@ -15,3 +15,4 @@
 (defun scale-coords(coords scale)
   (map 'list #'(lambda (x) (* x scale)) coords)
   )
+
