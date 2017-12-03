@@ -80,13 +80,31 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
 	       when (loop for row from 1 to n
 		       for col in solution
 		       always (/= new-col col (+ col row) (- col row)))
-		collect(lambda()(queens-bktlz4 n print-func (1+ i) (cons new-col solution)))
+	    collect(let* ((next-i (1+ i))
+			  (new-sol (cons new-col solution)))
+		     (lambda()(queens-bktlz4 n print-func next-i new-sol)))
 	      )))
+
+(defun testc()
+  (loop for i from 1 to 4
+     collect(let* ((c i))
+	      (lambda()(1+ c))))
+  )
+
+(defun tr()
+  (let* ((lam (testc)))
+    (loop for lamb in lam
+	 do(funcall lamb)))
+  )
+
+(funcall (car (testc)))
+
+(format t "I ~a~%" ())
 
 (defun lazy-evaluator(steps)
   (let* ((new-steps (funcall (car steps)))
 	 (new-sol (nconc new-steps (cdr steps))))
-    (format t "new sol ~a~%" new-sol)
+;;    (format t "new sol ~a~%" new-sol)
     (nconc new-sol )
     )
   )
