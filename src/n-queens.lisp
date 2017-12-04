@@ -2,7 +2,6 @@
   (:use :common-lisp
 	:primitives
 	:ltk
-	:cells
 	#+:sbcl :sb-ext
           )
   (:export
@@ -25,17 +24,8 @@
                                       (format t "Hello World!~&")))))
      (pack b))))
 
-(defun trec(i n)
-  (format t "i: ~a~%" i)
-  (if (eq i n)
-      (list '())
-  (lambda ()(trec (1+ i)))
-  )
-
 (funcall (funcall (trec 1)))
 
-(defmodel solutions-model()
-  ((current :accessor current :initarg :current :initform (c-in nil))))
 
 (defun queens-bkt-lz (n &optional print-func (i 0) (solution '()))
   (format t "i: ~a~%" i)
@@ -58,24 +48,12 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
   ()
   )
 
-(defun queens-bkt-lz3 (n &optional print-func (i 0) (solution '()))
-  (format t "i: ~a~%" i)
-  (funcall print-func solution)
-  (if (= i n)
-      (lambda()(list solution))
-      (let*  (new-col) )
-	 (loop for new-col from 1 to n
-	       when (loop for row from 1 to n
-		       for col in solution
-		       always (/= new-col col (+ col row) (- col row)))
-		collect(queens-bkt-lz3 n print-func (1+ i) (cons new-col solution))
-	      )))
 
 (defun queens-bktlz4 (n &optional print-func (i 0) (solution '()))
   (format t "i: ~a~% sol: ~a~%" i solution)
   (funcall print-func solution)
   (if (= i n)
-	 (lambda()())
+      (list #'(lambda()()))      
 	 (loop for new-col from 1 to n
 	       when (loop for row from 1 to n
 		       for col in solution
@@ -121,7 +99,8 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
 		nconc(queens-bkt n print-func (1+ i) (cons new-col solution))
 	      )))
 
-(queens-bkt 4 #'(lambda (sol)(format t "new sol: ~a~%" (translate-coords sol -1 -1)))
+(queens-bkt 4 #'(lambda (sol)(format t "new sol: ~a~%" (translate-coords sol -1 -1))))
+
 
 (lazy-evaluator (queens-bktlz4 4 #'(lambda (sol)(format t "new sol: ~a~%" (translate-coords sol -1 -1)))))
 
@@ -140,11 +119,6 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
 
 (queens 4 4 #'(lambda (sol)(format t "new sol: ~a~%" sol)))
 
-(let* (q (make-instance 'solutions-model))
-  (defobserver current ((self solutions-model))
-    (format t "new value of current is: ~a~%" new-value))
-  (queens q 4)
-  )
 
 (defclass queen-model2()
   ((i :initarg :i)
@@ -175,6 +149,7 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
       (setf (gethash 'queens board-model) q)
       )
     )
+  
   )
 
 (defun clear-board(gui-model)
@@ -183,11 +158,6 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
     (loop for queen in solution
 	 do(remove-queen queen board-canvas))
     )
-  )
-
-(defun add-queen(solution queen)
-  (draw-queen (i queen) (j queen))
-  (push queen solution)
   )
 
 (defun get-board-settings(size)
@@ -203,15 +173,17 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
 	 (bstop  (make-instance 'button :master bar :text "Stop"  :command 'hide-queen))
 	 )
     (pack bar :side :bottom)
+    
     (pack bstop :side :left)
     )
   )
 
 (defun draw-chessboard(n)
+  
   (with-ltk ()
     (let* ((*debug-tk* nil)
 	   (n (1- n))
-	   (queens (parse-queens '(2 4 6)))
+	   ;;(queens (parse-queens '(2 4 6)))
 	   (c (make-instance 'canvas :width 400 :height 300))
 	   (board-model (get-board-settings n))
 	   (squares (loop for i from 0 to n
@@ -286,8 +258,6 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
   )
 
 (draw-chessboard 8)
-
-(translate_vect '(1 2 3 4) 1 2)
 
 (get-board-settings 4)
 
