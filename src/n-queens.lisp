@@ -48,6 +48,8 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
   ()
   )
 
+(defun search-finished(board-model)
+  (setf (gethash 'timer board-model) 0))
 
 (defun queens-bktlz4 (n &optional print-func (i 0) (solution '()))
   (format t "i: ~a~% sol: ~a~%" i solution)
@@ -82,9 +84,9 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
 (defun lazy-evaluator(steps)
   (let* ((new-steps (funcall (car steps)))
 	 (new-sol (nconc new-steps (cdr steps))))
-;;    (format t "new sol ~a~%" new-sol)
-    (nconc new-sol )
-    )
+    (format t "new sol ~a~%" new-sol)
+    (format t "len sol ~a~%" (length new-sol))
+    (nconc new-sol ))
   )
 
 (defun queens-bkt (n &optional print-func (i 0) (solution '()))
@@ -134,18 +136,21 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
 
 (defun show-solution(solution gui-model)
   (clear-board gui-model)
-  (let* ((queens (parse-queens (translate-coords solution -1 -1))))
+  (let* ((queens (parse-queens (translate-coords (reverse solution) -1 -1)))
+	 )
+    (format t "sow-solution ~a~% " solution)
     (draw-queens queens gui-model))
   )
 
 (defun draw-queens(queens board-model)
   (let* ((canvas (gethash 'canvas board-model))
+	   (color (if (= (length queens) (gethash 'size board-model)) "green" "gold"))
 	 )
     (let* (
     (q (loop for queen in queens
 	  collect(let* ((i (slot-value queen 'i))
 			 (j (slot-value queen 'j)))
-		  (draw-queen i j canvas board-model)))))
+		  (draw-queen i j canvas board-model color)))))
       (setf (gethash 'queens board-model) q)
       )
     )
@@ -168,13 +173,13 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
 	 settings)
   )
 
-(defun draw-menu()
+(defun draw-menu(board-model)
   (let* ((bar (make-instance 'frame))
-	 (bstop  (make-instance 'button :master bar :text "Stop"  :command 'hide-queen))
+	 (bstep  (make-instance 'button :master bar :text "Step"  :command (lambda()(update-solutions board-model))))
 	 )
     (pack bar :side :bottom)
     
-    (pack bstop :side :left)
+    (pack bstep :side :left)
     )
   )
 
@@ -182,12 +187,11 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
   
   (with-ltk ()
     (let* ((*debug-tk* nil)
-	   (n (1- n))
 	   ;;(queens (parse-queens '(2 4 6)))
 	   (c (make-instance 'canvas :width 400 :height 300))
 	   (board-model (get-board-settings n))
-	   (squares (loop for i from 0 to n
-		      nconc (loop for j from 0 to n
+	   (squares (loop for i from 0 to (1- n)
+		      nconc (loop for j from 0 to (1- n)
 			       collect(draw-square i j c board-model)))))
      (pack c :expand 1 :fill :both)
      (scrollregion c 0 0 800 800)
@@ -200,11 +204,11 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
        (after 1000 #'(lambda()(alter-queen q3 c)))
        (after 2000 #'(lambda()(remove-queen q3 c)))
        )
-     (draw-menu)
+     (draw-menu board-model)
 ;;     (draw-queens queens board-model)
 ;;     (show-solution '(2 3 4) board-model)
      ;;     (queens-bkt n #'(lambda (sol)(show-solution sol board-model)))
-     (let* ((solutions (queens-bktlz4 n #'(lambda (sol)(show-solution sol board-model)))))
+     (let* ((solutions (queens-bktlz4  n #'(lambda (sol)(show-solution sol board-model)))))
        (setf (gethash 'solutions board-model) solutions))
      (update-solutions board-model)
 
@@ -226,20 +230,28 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
     square
     ))
 
-(defun update-solutions(board-model)
-  (let* ((solutions (gethash 'solutions board-model))
-	 (new-solutions (lazy-evaluator solutions))
-	 )
-    (after 1000 #'(lambda()(update-solutions board-model)))
-    (setf (gethash 'solutions board-model) new-solutions))
-  )
+(defun auto-update-solution(board-model)
+  (let* ((timer-interval (gethash 'timer-interval board-model)))
+    (if (= 0 timer-interval)
+	()
+	(let ()
+	  (after timer-interval #'(lambda()(auto-update-solution board-model)))
+	  (update-solutions board-model)))))
 
-(defun draw-queen(x y canvas board-model)
+(defun update-solutions(board-model)
+  (let* ((solutions (gethash 'solutions board-model)))
+    (if (= 0 (length solutions))
+	()
+	(let* ((new-solutions (lazy-evaluator solutions)))
+	     (setf (gethash 'solutions board-model) new-solutions)))
+	 ))
+
+(defun draw-queen(x y canvas board-model &optional (color "yellow"))
   (let* ((queen-coords '(10 70 70 70 60 60 70 45 75 12 60 40 58 6 47 40 40 2 32 40 21 6 17 40 3 12 5 40 18 60 10 70))
 	 (scalled-coords (primitives:scale-coords queen-coords 0.5))
 	 (translated-coords (primitives:translate-coords scalled-coords (get-square-coords x board-model) (get-square-coords y board-model)))
 	 (queen (create-polygon canvas translated-coords)))
-    (itemconfigure canvas queen "fill" "gold")
+    (itemconfigure canvas queen "fill" color)
     queen)
   )
 
@@ -257,7 +269,7 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
   (itemconfigure canvas queen "fill" "red")
   )
 
-(draw-chessboard 8)
+(draw-chessboard 4)
 
 (get-board-settings 4)
 
