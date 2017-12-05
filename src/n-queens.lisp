@@ -77,10 +77,6 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
 	 do(funcall lamb)))
   )
 
-(funcall (car (testc)))
-
-(format t "I ~a~%" ())
-
 (defun lazy-evaluator(steps)
   (let* ((new-steps (funcall (car steps)))
 	 (new-sol (nconc new-steps (cdr steps))))
@@ -101,9 +97,6 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
 		nconc(queens-bkt n print-func (1+ i) (cons new-col solution))
 	      )))
 
-(queens-bkt 4 #'(lambda (sol)(format t "new sol: ~a~%" (translate-coords sol -1 -1))))
-
-
 (lazy-evaluator (queens-bktlz4 4 #'(lambda (sol)(format t "new sol: ~a~%" (translate-coords sol -1 -1)))))
 
 (defun queens (n &optional (m n) (print-func))
@@ -118,8 +111,6 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
                                      for col in solution
                                      always (/= new-col col (+ col row) (- col row)))
 		     collect (cons new-col solution)))))
-
-(queens 4 4 #'(lambda (sol)(format t "new sol: ~a~%" sol)))
 
 
 (defclass queen-model2()
