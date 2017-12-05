@@ -4,7 +4,8 @@
           )
   (:export
    #:translate-coords
-   #:scale-coords))
+   #:scale-coords
+   #:get-canvas-size))
    
 (in-package :primitives)
 
@@ -16,3 +17,5 @@
   (map 'list #'(lambda (x) (* x scale)) coords)
   )
 
+(defun get-canvas-size(n side margin)
+  (+ (* n side) (* 2 margin)))
