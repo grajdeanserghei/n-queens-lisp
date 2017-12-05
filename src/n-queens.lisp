@@ -24,9 +24,6 @@
                                       (format t "Hello World!~&")))))
      (pack b))))
 
-(funcall (funcall (trec 1)))
-
-
 (defun queens-bkt-lz (n &optional print-func (i 0) (solution '()))
   (format t "i: ~a~%" i)
   (funcall print-func solution)
@@ -64,18 +61,6 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
 			  (new-sol (cons new-col solution)))
 		     (lambda()(queens-bktlz4 n print-func next-i new-sol)))
 	      )))
-
-(defun testc()
-  (loop for i from 1 to 4
-     collect(let* ((c i))
-	      (lambda()(1+ c))))
-  )
-
-(defun tr()
-  (let* ((lam (testc)))
-    (loop for lamb in lam
-	 do(funcall lamb)))
-  )
 
 (defun lazy-evaluator(steps)
   (let* ((new-steps (funcall (car steps)))
@@ -262,19 +247,6 @@ nconc(cons solution (lambda()(queens-bkt-lz n print-func (1+ i) (cons new-col so
 
 (draw-chessboard 4)
 
-(get-board-settings 4)
-
-
-(defparameter *c* (make-instance 'queen-model2 :i 1 :j 3))
-
-(slot-value *c* 'i)
-
-(parse-queens '(2 4))
 
 
 
-
-(defparameter *account*
-  (make-instance 'bank-account :customer-name "John Doe" :balance 1000))
-
-(slot-value *account* 'customer-name)
