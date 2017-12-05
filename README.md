@@ -1,20 +1,30 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# N-Queens problem in LISP with GUI 
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+This is a toy project in which I explore LISP. It is a desktop application written in LISP. For GUI is uses [Tcl/Tk](http://www.peter-herth.de/ltk/ltkdoc-single/) library.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+## Getting Started
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+### Prerequisites
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://www.visualstudio.com/en-us/docs/git/create-a-readme). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+#### Libbraries
+For GUI [LTK - a Lisp binding to the Tk toolkit](http://www.peter-herth.de/ltk/ltkdoc-single/) is required.
+
+Standard installation of [tcl/tk](https://www.activestate.com/activetcl/downloads) are required 
+
+#### EMACS install instructions
+1. Install [EMACS](https://www.gnu.org/software/emacs/download.html)
+2. [Steel Bank Common Lisp](http://www.sbcl.org/platform-table.html)
+3. Download [Quciklisp](https://www.quicklisp.org/beta/) and put it in home directory. Run in cmd `sbcl --load quicklisp.lisp`
+ Follow instructions. 
+ * run `(ql:add-to-init-file)` to 
+4. Install Slime by running `(ql:quickload "quicklisp-slime-helper")` in lisp cmd (smcl)
+ * create `.emacs` file in your lisp home directory.
+ * copy 
+ ```
+  (load (expand-file-name "~/quicklisp/slime-helper.el"))
+  ;; Replace "sbcl" with the path to your implementation
+  (setq inferior-lisp-program "sbcl")
+  ```
+  from console and add it to `.emacs` file
+
+
