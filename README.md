@@ -26,5 +26,5 @@ Standard installation of [tcl/tk](https://www.activestate.com/activetcl/download
   (setq inferior-lisp-program "sbcl")
   ```
   from console and add it to `.emacs` file
-
+5. To add package to asdf run ` (push #p"/projects/my-project/" asdf:*central-registry*)` in lisp console.
 

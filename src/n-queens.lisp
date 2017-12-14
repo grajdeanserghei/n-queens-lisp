@@ -36,6 +36,7 @@
 (defun search-finished(board-model)
   (setf (gethash 'timer board-model) 0)
   (clear-board board-model)
+  (create-text (gethash 'canvas board-model) -10 -10 "Search finished" )
   (show-search-finished board-model)
   )
 	
@@ -162,7 +163,7 @@
      )))
 
 
-(draw-chessboard 4)
+(draw-chessboard 8)
 
 
 
