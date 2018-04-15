@@ -1,6 +1,6 @@
 # N-Queens problem in LISP with GUI 
 
-This is a toy project in which I explore LISP. It is a desktop application written in LISP. For GUI is uses [Tcl/Tk](http://www.peter-herth.de/ltk/ltkdoc-single/) library.
+This is a toy project in which I explore LISP. It is a desktop application written in LISP. For GUI [Tcl/Tk](http://www.peter-herth.de/ltk/ltkdoc-single/) library is used.
 
 
 ![alt text](https://github.com/grajdeanserghei/n-queens-lisp/blob/master/docs/images/intermediate_solution.png "GUI")
@@ -9,10 +9,10 @@ This is a toy project in which I explore LISP. It is a desktop application writt
 
 ### Prerequisites
 
-#### Libbraries
+#### Libraries
 For GUI [LTK - a Lisp binding to the Tk toolkit](http://www.peter-herth.de/ltk/ltkdoc-single/) is required.
 
-Standard installation of [tcl/tk](https://www.activestate.com/activetcl/downloads) are required 
+Standard installation of [tcl/tk](https://www.activestate.com/activetcl/downloads) is required. 
 
 #### EMACS install instructions
 1. Install [EMACS](https://www.gnu.org/software/emacs/download.html)
